@@ -1,0 +1,30 @@
+name: memoin_desktop
+description: MemoIn desktop application built with Flutter and Supabase
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: '>=3.4.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  supabase_flutter: ^2.9.1
+  fl_chart: ^0.70.2
+  intl: ^0.20.2
+  excel: ^4.0.6
+  file_picker: ^8.1.7
+  file_saver: ^0.2.14
+  shared_preferences: ^2.3.0
+  cupertino_icons: ^1.0.8
+  flutter_svg: ^2.0.17
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/Logo.svg
