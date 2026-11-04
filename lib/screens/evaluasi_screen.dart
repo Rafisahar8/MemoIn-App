@@ -473,7 +473,7 @@ class _EvaluasiScreenState extends State<EvaluasiScreen> {
       );
 
   Widget _infoPill(int count) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+        padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
         decoration: BoxDecoration(
           color: const Color(0xFFEFF6FF),
           borderRadius: BorderRadius.circular(AppTheme.radiusControl),
@@ -495,11 +495,30 @@ class _EvaluasiScreenState extends State<EvaluasiScreen> {
         ]),
       );
 
-  Widget _badgeAmber(String text) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-        decoration: BoxDecoration(color: const Color(0xFFFEF3C7), borderRadius: BorderRadius.circular(6)),
-        child: Text(text,
-            style: const TextStyle(fontSize: 12.5, fontWeight: FontWeight.w600, color: Color(0xFFB45309))),
+  /// Badge jenis gangguan dominan. Diletakkan di bawah subjudul (lebar penuh) supaya teks panjang tidak terpotong-potong.
+  Widget _dominanBadge(List<String> names) => Container(
+        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        decoration: BoxDecoration(
+          color: const Color(0xFFFEF3C7),
+          borderRadius: BorderRadius.circular(AppTheme.radiusControl),
+          border: Border.all(color: const Color(0xFFFDE68A)),
+        ),
+        child: Row(mainAxisSize: MainAxisSize.min, crossAxisAlignment: CrossAxisAlignment.start, children: [
+          const Padding(
+            padding: EdgeInsets.only(top: 1),
+            child: Icon(Icons.emoji_events_outlined, size: 18, color: Color(0xFFB45309)),
+          ),
+          const SizedBox(width: 8),
+          Flexible(
+            child: Text.rich(
+              TextSpan(children: [
+                const TextSpan(text: 'Dominan: ', style: TextStyle(fontWeight: FontWeight.w700)),
+                TextSpan(text: names.join(', ')),
+              ]),
+              style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w600, height: 1.35, color: Color(0xFFB45309)),
+            ),
+          ),
+        ]),
       );
 
   // ---------------------------------------------------------------- filter periode
@@ -521,7 +540,7 @@ class _EvaluasiScreenState extends State<EvaluasiScreen> {
               onPressed: resetPeriod,
               child: const Text('Reset'),
             );
-            if (box.maxWidth < 900) {
+            if (box.maxWidth < 1120) {
               return Column(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
                 Wrap(spacing: 12, runSpacing: 12, crossAxisAlignment: WrapCrossAlignment.end, children: [
                   SizedBox(width: 190, child: from),
@@ -541,8 +560,8 @@ class _EvaluasiScreenState extends State<EvaluasiScreen> {
               apply,
               const SizedBox(width: 10),
               reset,
-              const Spacer(),
-              Flexible(child: _infoPill(count)),
+              const SizedBox(width: 16),
+              Expanded(child: Align(alignment: Alignment.centerRight, child: _infoPill(count))),
             ]);
           }),
         ),
@@ -658,23 +677,17 @@ class _EvaluasiScreenState extends State<EvaluasiScreen> {
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              const Expanded(
-                child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Text('Distribusi Jenis Gangguan',
-                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppTheme.ink)),
-                  SizedBox(height: 3),
-                  Text(
-                    'Jumlah kasus per jenis gangguan — Sambung Langsung dikategorikan sebagai Kondisi, bukan Jenis Gangguan',
-                    style: TextStyle(fontSize: 13, color: AppTheme.muted),
-                  ),
-                ]),
-              ),
-              if (data.isNotEmpty) ...[
-                const SizedBox(width: 12),
-                Flexible(child: _badgeAmber('${dominantsOf(data).join(', ')} (Dominan)')),
-              ],
-            ]),
+            const Text('Distribusi Jenis Gangguan',
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600, color: AppTheme.ink)),
+            const SizedBox(height: 3),
+            const Text(
+              'Jumlah kasus per jenis gangguan — Sambung Langsung dikategorikan sebagai Kondisi, bukan Jenis Gangguan',
+              style: TextStyle(fontSize: 13, color: AppTheme.muted),
+            ),
+            if (data.isNotEmpty) ...[
+              const SizedBox(height: 12),
+              _dominanBadge(dominantsOf(data)),
+            ],
             const SizedBox(height: 16),
             if (loading)
               const SizedBox(height: 260, child: Center(child: CircularProgressIndicator()))

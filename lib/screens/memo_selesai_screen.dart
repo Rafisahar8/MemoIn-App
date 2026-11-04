@@ -155,7 +155,6 @@ class _MemoSelesaiScreenState extends State<MemoSelesaiScreen> {
   }
 
   Widget _dateRange() => Row(mainAxisSize: MainAxisSize.min, children: [
-        const SizedBox(width: 10),
         SizedBox(width: 160, child: DateBox(value: pFrom, onTap: () => _pick(true))),
         const Padding(
           padding: EdgeInsets.symmetric(horizontal: 10),
